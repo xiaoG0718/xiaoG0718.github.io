@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-08T15:25:28.182Z</updated>
+  <updated>2020-12-14T01:43:09.940Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>xss漏洞</title>
+    <link href="http://example.com/wiki/xss%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://example.com/wiki/xss%E6%BC%8F%E6%B4%9E/</id>
+    <published>2020-12-11T00:36:14.000Z</published>
+    <updated>2020-12-14T01:43:09.940Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="xss漏洞"><a href="#xss漏洞" class="headerlink" title="xss漏洞"></a>xss漏洞</h1><p>xss：跨站脚本攻击。将脚本嵌入网站，用户打开就启动了脚本。</p><p>在xss模块，可进行需要的选择。</p><p>获取用户cookie，发到xss平台。</p><p>反射型xss：已经做好的一个页面，让用户访问获取cookie(一次性的)</p><p>储存型xss：一般存在于留言板中，只要用户访问看到留言就会获取cookie(一直有效)</p><p>dom型xss：不经过后端，经过url传入参数去触发攻击（与反射型类似）</p><p>xss盲注：不确定代码被嵌入到哪里，需要闭合，不断尝试</p><h2 id="可能出现的地方"><a href="#可能出现的地方" class="headerlink" title="可能出现的地方"></a>可能出现的地方</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在又<span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span>或<span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span>中</span><br></pre></td></tr></table></figure><p>在弹窗弹出我们输入内容的地方。</p><h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><h3 id="Xsstrike"><a href="#Xsstrike" class="headerlink" title="Xsstrike"></a>Xsstrike</h3><p>在GitHub中，代码写得很不错。最基本语句：</p><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">python3</span> xsstrike.<span class="keyword">py</span> -<span class="keyword">u</span> <span class="string">&quot;http://exmple.com/exmple.php?page=d3v&amp;name=123&quot;</span></span><br></pre></td></tr></table></figure><p>有多个参数得时候，在要测试的参数后面加上d3v。</p><p>详情查看使用手册。</p><h3 id="burp-suite-中的xss-validator"><a href="#burp-suite-中的xss-validator" class="headerlink" title="burp suite 中的xss validator"></a>burp suite 中的xss validator</h3><p>环境：要下载phantomjs，配置环境</p><p>需要一个xss.js文件，起到监听和交互作用</p><p>到burp中的商店中下载xss validator</p><p>先进入环境监听，在burp中抓包，发送到intruder中，payloads sets中设置extension-generated，然后设置插件</p><p>标识字符修改，在插件的grep phrase中</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;xss漏洞&quot;&gt;&lt;a href=&quot;#xss漏洞&quot; class=&quot;headerlink&quot; title=&quot;xss漏洞&quot;&gt;&lt;/a&gt;xss漏洞&lt;/h1&gt;&lt;p&gt;xss：跨站脚本攻击。将脚本嵌入网站，用户打开就启动了脚本。&lt;/p&gt;
+&lt;p&gt;在xss模块，可进行需要的选择。&lt;/p&gt;</summary>
+      
+    
+    
+    
+    <category term="渗透学习" scheme="http://example.com/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    
+  </entry>
   
   <entry>
     <title>2020-12-8</title>
