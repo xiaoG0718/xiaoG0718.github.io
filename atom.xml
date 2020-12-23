@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-14T01:43:09.940Z</updated>
+  <updated>2020-12-23T13:25:53.766Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CSRF漏洞</title>
+    <link href="http://example.com/wiki/CSRF%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://example.com/wiki/CSRF%E6%BC%8F%E6%B4%9E/</id>
+    <published>2020-12-21T08:47:15.000Z</published>
+    <updated>2020-12-23T13:25:53.766Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="CSRF漏洞"><a href="#CSRF漏洞" class="headerlink" title="CSRF漏洞"></a>CSRF漏洞</h1><p>跨站请求伪造：通过欺骗用户的浏览器，让用户点击，使用用户的名义去执行操作。</p><p>制造方法：在burp中抓包然后写成POC，最后使用户点击访问。</p><h2 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h2><p>绕过referer：</p><p>1.使用其它的协议（https://,ftp://,file://,dat://,等），通常使用iframe标签</p><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe</span><br><span class="line"><span class="attribute">src</span>=<span class="string">&quot;data:text/html;base64,IDxmb3JtIGFjdGlvbj0iaHR0cDovL3Rlc3QuY29tL3Bpa2FjaHUvdnVsL2NzcmYvY3NyZnBvc3QvY3Ny</span></span><br><span class="line"><span class="string">Zl9wb3N0X2VkaXQucGhwIiBtZXRob2Q9IlBPU1QiPgogICAgICA8aW5wdXQgdHlwZT0iaGlkZGVuIiBuYW1lPSJzZXgiIHZhbHVlPSJnaXJ</span></span><br><span class="line"><span class="string">sIiAvPgogICAgICA8aW5wdXQgdHlwZT0iaGlkZGVuIiBuYW1lPSJwaG9uZW51bSIgdmFsdWU9IjExMTExIiAvPgogICAgICA8aW5wdXQgdH</span></span><br><span class="line"><span class="string">lwZT0iaGlkZGVuIiBuYW1lPSJhZGQiIHZhbHVlPSJjaGFpbiIgLz4KICAgICAgPGlucHV0IHR5cGU9ImhpZGRlbiIgbmFtZT0iZW1haWwiI</span></span><br><span class="line"><span class="string">HZhbHVlPSJ2aW5jZSYjNjQ7cGlrYWNodSYjNDY7Y29tIiAvPgogICAgICA8aW5wdXQgdHlwZT0iaGlkZGVuIiBuYW1lPSJzdWJtaXQiIHZh</span></span><br><span class="line"><span class="string">bHVlPSJzdWJtaXQiIC8+CiAgICAgIDxpbnB1dCB0eXBlPSJzdWJtaXQiIHZhbHVlPSJTdWJtaXQgcmVxdWVzdCIgLz4KICAgIDwvZm9ybT4</span></span><br><span class="line"><span class="string">=&quot;</span>&gt;</span><br></pre></td></tr></table></figure><p>2.referer绕过规则不严谨：</p><p>如果匹配x.com，可以构造一个名为x.com的文件夹进行绕过</p><p>如果匹配<a href="http://x.com,可以制造一个子域名/">http://x.com，可以制造一个子域名</a></p><p>3.寻找跳转链接：</p><p>寻找跳转链接，是页面跳转到自己的csrf请求页面中。</p><p>绕过token：</p><p>1.可以试一下删除token参数或者设置为空（空列表）</p><p>2.可以暴力破解</p><p>3.token值放在了url之中</p><p>用户的页面url中有token值，可以正在页面中放一个危险的链接，用户点击，会提取到用户的token值，再危险页面中的一张图片利用token值。</p><p>4.token值放在了cookie中</p><p>属于前端问题，用户自己对自己校对token值。</p><p>进行会话固定来控制受害者的cookie</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;CSRF漏洞&quot;&gt;&lt;a href=&quot;#CSRF漏洞&quot; class=&quot;headerlink&quot; title=&quot;CSRF漏洞&quot;&gt;&lt;/a&gt;CSRF漏洞&lt;/h1&gt;&lt;p&gt;跨站请求伪造：通过欺骗用户的浏览器，让用户点击，使用用户的名义去执行操作。&lt;/p&gt;
+&lt;p&gt;制造方法：在bur</summary>
+      
+    
+    
+    
+    <category term="渗透学习" scheme="http://example.com/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="csrf漏洞" scheme="http://example.com/tags/csrf%E6%BC%8F%E6%B4%9E/"/>
+    
+  </entry>
   
   <entry>
     <title>xss漏洞</title>

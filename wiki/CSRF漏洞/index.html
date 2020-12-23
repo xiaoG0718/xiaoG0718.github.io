@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>CSRF漏洞 | xiaoG</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 5.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">CSRF漏洞</h1><a id="logo" href="/.">xiaoG</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">CSRF漏洞</h1><div class="post-meta">2020-12-21<span> | </span><span class="category"><a href="/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/">渗透学习</a></span></div><a class="disqus-comment-count" data-disqus-identifier="wiki/CSRF漏洞/" href="/wiki/CSRF%E6%BC%8F%E6%B4%9E/#disqus_thread"></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CSRF%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">CSRF漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%95%E8%BF%87"><span class="toc-number">1.1.</span> <span class="toc-text">绕过</span></a></li></ol></li></ol></div></div><div class="post-content"><h1 id="CSRF漏洞"><a href="#CSRF漏洞" class="headerlink" title="CSRF漏洞"></a>CSRF漏洞</h1><p>跨站请求伪造：通过欺骗用户的浏览器，让用户点击，使用用户的名义去执行操作。</p>
+<p>制造方法：在burp中抓包然后写成POC，最后使用户点击访问。</p>
+<h2 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h2><p>绕过referer：</p>
+<p>1.使用其它的协议（https://,ftp://,file://,dat://,等），通常使用iframe标签</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe</span><br><span class="line"><span class="attribute">src</span>=<span class="string">&quot;data:text/html;base64,IDxmb3JtIGFjdGlvbj0iaHR0cDovL3Rlc3QuY29tL3Bpa2FjaHUvdnVsL2NzcmYvY3NyZnBvc3QvY3Ny</span></span><br><span class="line"><span class="string">Zl9wb3N0X2VkaXQucGhwIiBtZXRob2Q9IlBPU1QiPgogICAgICA8aW5wdXQgdHlwZT0iaGlkZGVuIiBuYW1lPSJzZXgiIHZhbHVlPSJnaXJ</span></span><br><span class="line"><span class="string">sIiAvPgogICAgICA8aW5wdXQgdHlwZT0iaGlkZGVuIiBuYW1lPSJwaG9uZW51bSIgdmFsdWU9IjExMTExIiAvPgogICAgICA8aW5wdXQgdH</span></span><br><span class="line"><span class="string">lwZT0iaGlkZGVuIiBuYW1lPSJhZGQiIHZhbHVlPSJjaGFpbiIgLz4KICAgICAgPGlucHV0IHR5cGU9ImhpZGRlbiIgbmFtZT0iZW1haWwiI</span></span><br><span class="line"><span class="string">HZhbHVlPSJ2aW5jZSYjNjQ7cGlrYWNodSYjNDY7Y29tIiAvPgogICAgICA8aW5wdXQgdHlwZT0iaGlkZGVuIiBuYW1lPSJzdWJtaXQiIHZh</span></span><br><span class="line"><span class="string">bHVlPSJzdWJtaXQiIC8+CiAgICAgIDxpbnB1dCB0eXBlPSJzdWJtaXQiIHZhbHVlPSJTdWJtaXQgcmVxdWVzdCIgLz4KICAgIDwvZm9ybT4</span></span><br><span class="line"><span class="string">=&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>2.referer绕过规则不严谨：</p>
+<p>如果匹配x.com，可以构造一个名为x.com的文件夹进行绕过</p>
+<p>如果匹配<a target="_blank" rel="noopener" href="http://x.com,可以制造一个子域名/">http://x.com，可以制造一个子域名</a></p>
+<p>3.寻找跳转链接：</p>
+<p>寻找跳转链接，是页面跳转到自己的csrf请求页面中。</p>
+<p>绕过token：</p>
+<p>1.可以试一下删除token参数或者设置为空（空列表）</p>
+<p>2.可以暴力破解</p>
+<p>3.token值放在了url之中</p>
+<p>用户的页面url中有token值，可以正在页面中放一个危险的链接，用户点击，会提取到用户的token值，再危险页面中的一张图片利用token值。</p>
+<p>4.token值放在了cookie中</p>
+<p>属于前端问题，用户自己对自己校对token值。</p>
+<p>进行会话固定来控制受害者的cookie</p>
+</div><div class="tags"><a href="/tags/csrf%E6%BC%8F%E6%B4%9E/"><i class="fa fa-tag"></i>csrf漏洞</a></div><div class="post-nav"><a class="next" href="/wiki/xss%E6%BC%8F%E6%B4%9E/">xss漏洞</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论（请确保 Disqus 可以正常加载）</button></div><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://example.com/wiki/CSRF漏洞/';
+    this.page.identifier = 'wiki/CSRF漏洞/';
+    this.page.title = 'CSRF漏洞';
+  };</script><script type="text/javascript" id="disqus-lazy-load-script">$.ajax({
+url: 'https://disqus.com/next/config.json',
+timeout: 2500,
+type: 'GET',
+success: function(){
+  var d = document;
+  var s = d.createElement('script');
+  s.src = '//xiaog## Your disqus_shortname, e.g. username.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', + new Date());
+  (d.head || d.body).appendChild(s);
+  $('.disqus_click_btn').css('display', 'none');
+},
+error: function() {
+  $('.disqus_click_btn').css('display', 'block');
+}
+});</script><script type="text/javascript" id="disqus-click-load">$('.btn_click_load').click(() => {  //click to load comments
+    (() => { // DON'T EDIT BELOW THIS LINE
+        var d = document;
+        var s = d.createElement('script');
+        s.src = '//xiaog## Your disqus_shortname, e.g. username.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', + new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    $('.disqus_click_btn').css('display','none');
+});</script><script type="text/javascript" id="disqus-count-script">$(function() {
+     var xhr = new XMLHttpRequest();
+     xhr.open('GET', '//disqus.com/next/config.json', true);
+     xhr.timeout = 2500;
+     xhr.onreadystatechange = function () {
+       if (xhr.readyState === 4 && xhr.status === 200) {
+         $('.post-meta .post-comments-count').show();
+         var s = document.createElement('script');
+         s.id = 'dsq-count-scr';
+         s.src = 'https://xiaog## Your disqus_shortname, e.g. username.disqus.com/count.js';
+         s.async = true;
+         (document.head || document.body).appendChild(s);
+       }
+     };
+     xhr.ontimeout = function () { xhr.abort(); };
+     xhr.send(null);
+   });
+</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/">渗透学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%83%B3/">随想</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/%E6%84%9F%E8%A7%89%E5%BE%88%E7%B4%AF/" style="font-size: 15px;">感觉很累</a> <a href="/tags/sql%E6%B3%A8%E5%85%A5/" style="font-size: 15px;">sql注入</a> <a href="/tags/xss/" style="font-size: 15px;">xss</a> <a href="/tags/%E9%9A%8F%E6%83%B3/" style="font-size: 15px;">随想</a> <a href="/tags/csrf%E6%BC%8F%E6%B4%9E/" style="font-size: 15px;">csrf漏洞</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/wiki/CSRF%E6%BC%8F%E6%B4%9E/">CSRF漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/wiki/xss%E6%BC%8F%E6%B4%9E/">xss漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/wiki/2020-12-8/">2020-12-8</a></li><li class="post-list-item"><a class="post-list-link" href="/wiki/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">sql注入总结</a></li><li class="post-list-item"><a class="post-list-link" href="/wiki/%E5%88%9D%E7%94%A8%E5%8D%9A%E5%AE%A2/">再用博客</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//xiaog## Your disqus_shortname, e.g. username.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.google.com" title="google" target="_blank">google</a><ul></ul><a href="https://www.github.com" title="github" target="_blank">github</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">xiaoG.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/love.js"></script><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":200,"height":600},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
