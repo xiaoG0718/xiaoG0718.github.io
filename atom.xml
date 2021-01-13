@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-23T13:25:53.766Z</updated>
+  <updated>2020-12-25T13:38:13.460Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JSON相关问题</title>
+    <link href="http://example.com/wiki/JSON%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/"/>
+    <id>http://example.com/wiki/JSON%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/</id>
+    <published>2020-12-23T13:32:45.000Z</published>
+    <updated>2020-12-25T13:38:13.460Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="JSONP跨域劫持和跨域读取资源导致信息泄露"><a href="#JSONP跨域劫持和跨域读取资源导致信息泄露" class="headerlink" title="JSONP跨域劫持和跨域读取资源导致信息泄露"></a>JSONP跨域劫持和跨域读取资源导致信息泄露</h2><p>用户访问网站a,返回手机号码，格式是</p><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">phoneNumber</span><span class="params">(&#123;<span class="string">&quot;phonenumber&quot;</span>:<span class="string">&quot;13399978910&quot;</span>&#125;)</span></span></span><br></pre></td></tr></table></figure><p>当用户访问一个恶意站点b时，站点b通过JSONP访问网站a获取到用户的手机号码</p><h2 id="同源策略（Same-origin-policy）"><a href="#同源策略（Same-origin-policy）" class="headerlink" title="同源策略（Same origin policy）"></a>同源策略（Same origin policy）</h2><p>同源策略是一种约定，简称sop，是浏览器最基本和核心的安全功能。</p><p>同源策略规定：不同域的客户端脚本在没有授权的情况下，不能读写对方的资源。</p><h3 id="哪些属于同一个域"><a href="#哪些属于同一个域" class="headerlink" title="哪些属于同一个域"></a>哪些属于同一个域</h3><p>必须相同域名，相同端口，相同协议，缺一不可。</p><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20201225205315306.png" alt="image-20201225205315306"></p><h2 id="AJAX（无法跨域获取数据）"><a href="#AJAX（无法跨域获取数据）" class="headerlink" title="AJAX（无法跨域获取数据）"></a>AJAX（无法跨域获取数据）</h2><p>异步的javascript和XML。是指⼀种创建交互式、快速动态 ⽹⻚应⽤的⽹⻚开发技术，⽆需重新加载整个⽹⻚的情况下，能够更新部分⽹⻚的技术。XML是说数据传输 的格式是XML，但其实返回的数据还有可能是JSON（⽬前已经成为主流），⽂本，HTML等。</p><h3 id="可以跨域的标签"><a href="#可以跨域的标签" class="headerlink" title="可以跨域的标签"></a>可以跨域的标签</h3><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20201225205905119.png" alt="image-20201225205905119"  /><p>上述标签可以跨域请求远程的资源，但是执行，AJAX返回的是JSON数据，不符合JS语法，要使用回调函数。</p><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20201225210127927.png" alt="image-20201225210127927"></p><h2 id="Callback输出点未控制造成xss"><a href="#Callback输出点未控制造成xss" class="headerlink" title="Callback输出点未控制造成xss"></a>Callback输出点未控制造成xss</h2><h3 id="JSON注入"><a href="#JSON注入" class="headerlink" title="JSON注入"></a>JSON注入</h3><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20201225211958468.png" alt="image-20201225211958468"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;JSONP跨域劫持和跨域读取资源导致信息泄露&quot;&gt;&lt;a href=&quot;#JSONP跨域劫持和跨域读取资源导致信息泄露&quot; class=&quot;headerlink&quot; title=&quot;JSONP跨域劫持和跨域读取资源导致信息泄露&quot;&gt;&lt;/a&gt;JSONP跨域劫持和跨域读取资源导致信息</summary>
+      
+    
+    
+    
+    <category term="渗透学习" scheme="http://example.com/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="JSON相关问题" scheme="http://example.com/tags/JSON%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/"/>
+    
+  </entry>
   
   <entry>
     <title>CSRF漏洞</title>
