@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-25T13:38:13.460Z</updated>
+  <updated>2021-01-18T08:28:00.537Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,74 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ssrf与URL重定向Bypass</title>
+    <link href="http://example.com/wiki/ssrf%E4%B8%8EURL%E9%87%8D%E5%AE%9A%E5%90%91Bypass/"/>
+    <id>http://example.com/wiki/ssrf%E4%B8%8EURL%E9%87%8D%E5%AE%9A%E5%90%91Bypass/</id>
+    <published>2021-01-18T07:28:02.000Z</published>
+    <updated>2021-01-18T08:28:00.537Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="URL限制绕过"><a href="#URL限制绕过" class="headerlink" title="URL限制绕过"></a>URL限制绕过</h2><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20210118152944507.png" alt="image-20210118152944507"></p><p>加上xip.io：提供dns解析的服务。如果加上例如127.0.0.1.xip.io会解析成127.0.0.1</p><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20210118155127572.png" alt="image-20210118155127572"></p><h2 id="畸形地址的绕过"><a href="#畸形地址的绕过" class="headerlink" title="畸形地址的绕过"></a>畸形地址的绕过</h2><p>可以Fuzz</p><ol><li><p>单斜线”/“绕过<a href="https://www.landgrey.me/redirect.php?url=/www.evil.com">https://www.landgrey.me/redirect.php?url=/www.evil.com</a></p></li><li><p>缺少协议绕过<a href="https://www.landgrey.me/redirect.php?url=//www.evil.com">https://www.landgrey.me/redirect.php?url=//www.evil.com</a></p></li><li><p> 多斜线”/“前缀绕过<a href="https://www.landgrey.me/redirect.php?url=///www.evil.comhttps://www.landgrey.me/redirect.php?url=////www.evil.com">https://www.landgrey.me/redirect.php?url=///www.evil.comhttps://www.landgrey.me/redirect.php?url=////www.evil.com</a></p></li><li><p> 利用”@”符号绕过<a href="https://www.landgrey.me/redirect.php?url=https://www.landgrey.me@www.evil.com">https://www.landgrey.me/redirect.php?url=https://www.landgrey.me@www.evil.com</a></p></li><li><p> 利用反斜线”&quot;绕过<a href="https://www.landgrey.me/redirect.php?url=https://www.evil.com%5Cwww.landgrey.me">https://www.landgrey.me/redirect.php?url=https://www.evil.com\www.landgrey.me</a></p></li><li><p> 利用”#”符号绕过<a href="https://www.landgrey.me/redirect.php?url=https://www.evil.com#www.landgrey.me">https://www.landgrey.me/redirect.php?url=https://www.evil.com#www.landgrey.me</a></p></li><li><p> 利用”?”号绕过<a href="https://www.landgrey.me/redirect.php?url=https://www.evil.com?www.landgrey.me">https://www.landgrey.me/redirect.php?url=https://www.evil.com?www.landgrey.me</a></p></li><li><p>利用”\“绕过<a href="https://www.landgrey.me/redirect.php?url=https://www.evil.com%5C%5Cwww.landgrey.me">https://www.landgrey.me/redirect.php?url=https://www.evil.com\\www.landgrey.me</a></p></li><li><p>利用”.”绕过</p><p><a href="https://www.landgrey.me/redirect.php?url=.evil">https://www.landgrey.me/redirect.php?url=.evil</a>           (可能会跳转到<a href="http://www.landgrey.me.evil域名/">www.landgrey.me.evil域名</a>)</p><p><a href="https://www.landgrey.me/redirect.php?url=.evil.com">https://www.landgrey.me/redirect.php?url=.evil.com</a>       (可能会跳转到evil.com域名)</p><p>10.重复特殊字符绕过</p><p><a href="https://www.landgrey.me/redirect.php?url=///www.evil.com//">https://www.landgrey.me/redirect.php?url=///www.evil.com//</a>..</p><p><a href="https://www.landgrey.me/redirect.php?url=////www.evil.com//">https://www.landgrey.me/redirect.php?url=////www.evil.com//</a>..</p><h2 id="SSRF对于请求内网地址的限制"><a href="#SSRF对于请求内网地址的限制" class="headerlink" title="SSRF对于请求内网地址的限制"></a>SSRF对于请求内网地址的限制</h2><h3 id="利用畸形网址与xio-io结合"><a href="#利用畸形网址与xio-io结合" class="headerlink" title="利用畸形网址与xio.io结合"></a>利用畸形网址与xio.io结合</h3><p>例如改成<img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20210118161331230.png" alt="image-20210118161331230"></p><h3 id="利用HOST"><a href="#利用HOST" class="headerlink" title="利用HOST"></a>利用HOST</h3><p>利用服务器host</p><p>更改host，访问test.com优先指向127.0.0.1</p><h3 id="利用302跳转"><a href="#利用302跳转" class="headerlink" title="利用302跳转"></a>利用302跳转</h3><h3 id="更改IP的写法"><a href="#更改IP的写法" class="headerlink" title="更改IP的写法"></a>更改IP的写法</h3><p>正则表达式和进制更改</p><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20210118161540153.png" alt="image-20210118161540153"></p><h3 id="利用其它的协议"><a href="#利用其它的协议" class="headerlink" title="利用其它的协议"></a>利用其它的协议</h3><p>file，gopher，ftp..</p><h3 id="迎合指定的后缀"><a href="#迎合指定的后缀" class="headerlink" title="迎合指定的后缀"></a>迎合指定的后缀</h3><p><a href="http://127.0.0.1/Discuz/upload/forum.php?mod=ajax&amp;action=downremoteimg&amp;message=%5Bimg%5Dhttp://baidu.com/?data=1.jpg%5B/img%5D">http://127.0.0.1/Discuz/upload/forum.php?mod=ajax&amp;action=downremoteimg&amp;message=[img]http://baidu.com/?data=1.jpg[/img]</a></p></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;URL限制绕过&quot;&gt;&lt;a href=&quot;#URL限制绕过&quot; class=&quot;headerlink&quot; title=&quot;URL限制绕过&quot;&gt;&lt;/a&gt;URL限制绕过&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;C:\Users\XiaoG\AppData\Roaming\Typora\ty</summary>
+      
+    
+    
+    
+    <category term="渗透学习" scheme="http://example.com/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ssrf</title>
+    <link href="http://example.com/wiki/ssrf/"/>
+    <id>http://example.com/wiki/ssrf/</id>
+    <published>2021-01-17T03:37:21.000Z</published>
+    <updated>2021-01-18T06:22:03.307Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="SSRF漏洞"><a href="#SSRF漏洞" class="headerlink" title="SSRF漏洞"></a>SSRF漏洞</h2><p>是服务端请求伪造。</p><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20210118135327605.png" alt="image-20210118135327605"></p><p>上图为ssrf漏洞图示</p><p>利用ssrf漏洞可以探测第三方网站或者探测外网探测不到的本服务器的内网网络。</p><h3 id="SSRF（curl）"><a href="#SSRF（curl）" class="headerlink" title="SSRF（curl）"></a>SSRF（curl）</h3><p>curl主要探测内网机器，网络。</p><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20210118140507261.png" alt="image-20210118140507261"></p><p>类似上方，传入参数可以请求第三方网站</p><p>可以探测内网端口和机器</p><p>可以利用ceye.io验证漏洞是否存在</p><p>在利用burp验证漏洞是否可以利用</p><p>可以利用不同的协议去执行，读取本地文件</p><p>可以对他使用DDOS攻击</p><p>也可以利用python脚本探测端口</p><p><img src="C:\Users\XiaoG\AppData\Roaming\Typora\typora-user-images\image-20210118141501787.png" alt="image-20210118141501787"></p><p>可以利用googlehacker查找url或api关键字</p><p>filename，share，wap，url，link，src，source，target，u，display，sourceURl，imageURL，domai</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;SSRF漏洞&quot;&gt;&lt;a href=&quot;#SSRF漏洞&quot; class=&quot;headerlink&quot; title=&quot;SSRF漏洞&quot;&gt;&lt;/a&gt;SSRF漏洞&lt;/h2&gt;&lt;p&gt;是服务端请求伪造。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;C:\Users\XiaoG\AppData\Roam</summary>
+      
+    
+    
+    
+    <category term="渗透学习" scheme="http://example.com/categories/%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>前端漏洞补充</title>
+    <link href="http://example.com/wiki/%E5%89%8D%E7%AB%AF%E6%BC%8F%E6%B4%9E%E8%A1%A5%E5%85%85/"/>
+    <id>http://example.com/wiki/%E5%89%8D%E7%AB%AF%E6%BC%8F%E6%B4%9E%E8%A1%A5%E5%85%85/</id>
+    <published>2021-01-13T08:38:30.000Z</published>
+    <updated>2021-01-13T08:38:30.405Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href=""></a></li><li><a href=""></a></li></ul></blockquote>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料&quot;&gt;&lt;/a&gt;参考资料&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/l</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>JSON相关问题</title>
